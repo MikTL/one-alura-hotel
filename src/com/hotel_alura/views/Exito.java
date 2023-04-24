@@ -1,4 +1,4 @@
-package views;
+package com.hotel_alura.views;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;

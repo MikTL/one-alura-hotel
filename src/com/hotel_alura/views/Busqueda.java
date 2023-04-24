@@ -1,4 +1,4 @@
-package views;
+package com.hotel_alura.views;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -80,7 +80,7 @@ public class Busqueda extends JFrame {
 		JLabel lblNewLabel_4 = new JLabel("SISTEMA DE BÚSQUEDA");
 		lblNewLabel_4.setForeground(new Color(12, 138, 199));
 		lblNewLabel_4.setFont(new Font("Roboto Black", Font.BOLD, 24));
-		lblNewLabel_4.setBounds(331, 62, 280, 42);
+		lblNewLabel_4.setBounds(331, 62, 332, 42);
 		contentPane.add(lblNewLabel_4);
 		
 		JTabbedPane panel = new JTabbedPane(JTabbedPane.TOP);

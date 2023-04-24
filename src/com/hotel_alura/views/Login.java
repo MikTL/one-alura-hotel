@@ -1,9 +1,12 @@
-package views;
+package com.hotel_alura.views;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.hotel_alura.models.UserAcces;
+
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -20,19 +23,18 @@ import java.awt.event.MouseMotionAdapter;
 
 public class Login extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtUsuario;
 	private JPasswordField txtContrasena;
 	int xMouse, yMouse;
 	private JLabel labelExit;
-
-	/**
-	 * Launch the application.
-	 */
+	
+	// Instancia del UserAcces
+	UserAcces userAcces= new UserAcces();
+	/*
+	 Launch the application.
+	*/
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -50,7 +52,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
-		setResizable(false);
+		setResizable(true);
 		setUndecorated(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 788, 527);
@@ -192,7 +194,7 @@ public class Login extends JFrame {
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				Login();
+				LoginUser();
 			}
 		});
 		btnLogin.setBackground(SystemColor.textHighlight);
@@ -234,13 +236,14 @@ public class Login extends JFrame {
 		header.setLayout(null);
 	}
 	
-	private void Login() {
-		 String Usuario= "admin";
-	     String Contraseña="admin";
+	private void LoginUser() {
+		 String Usuario= txtUsuario.getText();
+	     String contrase=new String (txtContrasena.getPassword());
+	     
+	     Boolean isValidUser= userAcces.login(Usuario, contrase);
+	        
 
-	        String contrase=new String (txtContrasena.getPassword());
-
-	        if(txtUsuario.getText().equals(Usuario) && contrase.equals(Contraseña)){
+	        if(isValidUser){
 	            MenuUsuario menu = new MenuUsuario();
 	            menu.setVisible(true);
 	            dispose();	 

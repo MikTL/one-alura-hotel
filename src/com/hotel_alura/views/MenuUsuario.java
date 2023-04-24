@@ -1,4 +1,4 @@
-package views;
+package com.hotel_alura.views;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
@@ -6,13 +6,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
+//import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.event.ActionListener;
+//import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
+//import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseMotionAdapter;
@@ -111,7 +111,7 @@ public class MenuUsuario extends JFrame {
 		labelRegistro = new JLabel("Registro de reservas");
 		labelRegistro.setIcon(new ImageIcon(MenuUsuario.class.getResource("/imagenes/reservado.png")));
 		labelRegistro.setForeground(SystemColor.text);
-		labelRegistro.setBounds(25, 11, 205, 34);
+		labelRegistro.setBounds(12, 0, 220, 34);
 		labelRegistro.setFont(new Font("Roboto", Font.PLAIN, 18));
 		labelRegistro.setHorizontalAlignment(SwingConstants.LEFT);
 		btnRegistro.add(labelRegistro);
@@ -140,7 +140,7 @@ public class MenuUsuario extends JFrame {
 		
 		JLabel lblBusquedaDeReservas = new JLabel("Búsqueda");
 		lblBusquedaDeReservas.setIcon(new ImageIcon(MenuUsuario.class.getResource("/imagenes/pessoas.png")));
-		lblBusquedaDeReservas.setBounds(27, 11, 200, 34);
+		lblBusquedaDeReservas.setBounds(12, 0, 200, 34);
 		lblBusquedaDeReservas.setHorizontalAlignment(SwingConstants.LEFT);
 		lblBusquedaDeReservas.setForeground(Color.WHITE);
 		lblBusquedaDeReservas.setFont(new Font("Roboto", Font.PLAIN, 18));
@@ -190,13 +190,13 @@ public class MenuUsuario extends JFrame {
 	    panelFecha.setLayout(null);
 	    
 	    JLabel lblNewLabel_1 = new JLabel("Sistema de reservas Hotel Alura");
-	    lblNewLabel_1.setBounds(180, 11, 356, 42);
+	    lblNewLabel_1.setBounds(180, 11, 418, 42);
 	    panelFecha.add(lblNewLabel_1);
 	    lblNewLabel_1.setForeground(Color.WHITE);
 	    lblNewLabel_1.setFont(new Font("Roboto", Font.PLAIN, 24));
 	    
 	    JLabel labelFecha = new JLabel("New label");
-	    labelFecha.setBounds(35, 64, 294, 36);
+	    labelFecha.setBounds(35, 64, 411, 36);
 	    panelFecha.add(labelFecha);
 	    labelFecha.setForeground(Color.WHITE);
 	    labelFecha.setFont(new Font("Roboto", Font.PLAIN, 33));
@@ -206,7 +206,7 @@ public class MenuUsuario extends JFrame {
 	    
 	    JLabel lblNewLabel = new JLabel("Bienvenido");
 	    lblNewLabel.setFont(new Font("Roboto", Font.BOLD, 24));
-	    lblNewLabel.setBounds(302, 234, 147, 46);
+	    lblNewLabel.setBounds(302, 234, 206, 46);
 	    contentPane.add(lblNewLabel);
 	    
 	    String textoDescripcion = "<html><body>Sistema de reserva de hotel. Controle y administre de forma óptima y fácil <br> el flujo de reservas y de huespédes del hotel   </body></html>";
@@ -224,17 +224,17 @@ public class MenuUsuario extends JFrame {
 	    
 	    JLabel lblNewLabel_3 = new JLabel("- Registro de Reservas y Huéspedes");
 	    lblNewLabel_3.setFont(new Font("Roboto", Font.PLAIN, 17));
-	    lblNewLabel_3.setBounds(312, 444, 295, 27);
+	    lblNewLabel_3.setBounds(312, 444, 373, 27);
 	    contentPane.add(lblNewLabel_3);
 	    
 	    JLabel lblNewLabel_3_1 = new JLabel("- Edición de Reservas y Huéspedes existentes");
 	    lblNewLabel_3_1.setFont(new Font("Roboto", Font.PLAIN, 17));
-	    lblNewLabel_3_1.setBounds(312, 482, 355, 27);
+	    lblNewLabel_3_1.setBounds(312, 482, 410, 27);
 	    contentPane.add(lblNewLabel_3_1);
 	    
 	    JLabel lblNewLabel_3_2 = new JLabel("- Eliminar todo tipo de registros");
 	    lblNewLabel_3_2.setFont(new Font("Roboto", Font.PLAIN, 17));
-	    lblNewLabel_3_2.setBounds(312, 520, 295, 27);
+	    lblNewLabel_3_2.setBounds(312, 520, 351, 27);
 	    contentPane.add(lblNewLabel_3_2);
 	}
 	
