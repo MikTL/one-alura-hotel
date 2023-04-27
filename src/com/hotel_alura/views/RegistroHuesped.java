@@ -277,7 +277,12 @@ public class RegistroHuesped extends JFrame {
 						txtTelefono.getText(),
 						Integer.parseInt(txtNreserva.getText())
 						);
-				guestDAO.addGuest(guest);
+				Boolean isSaved = guestDAO.addGuest(guest);
+				if(isSaved) {
+					Exito exito= new Exito();
+					exito.setVisible(true);
+					dispose();
+				}
 				System.out.println(""+fechaNacimiento);
 			
 			}

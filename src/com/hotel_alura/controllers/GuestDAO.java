@@ -13,7 +13,7 @@ public class GuestDAO {
         this.dbConnection = new DBConnection();
     }
 
-    public void addGuest(Guest guest) {
+    public boolean addGuest(Guest guest) {
         String sql = "INSERT INTO guests (name, last_name, date_birth, nationality, phone_number, id_booking) VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dbConnection.getConnection();
@@ -24,10 +24,11 @@ public class GuestDAO {
             stmt.setString(4, guest.getNationality());
             stmt.setString(5, guest.getPhoneNumber());
             stmt.setInt(6, guest.getBookingId());
-
             stmt.executeUpdate();
+            return true;
         } catch (SQLException e) {
             throw new RuntimeException(e);
+            
         }
     }
 }
