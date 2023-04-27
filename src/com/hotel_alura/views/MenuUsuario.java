@@ -102,6 +102,7 @@ public class MenuUsuario extends JFrame {
 				reservas.setVisible(true);
 				dispose();
 			}
+
 		});
 		btnRegistro.setBounds(0, 255, 257, 56);
 		btnRegistro.setBackground(new Color(12, 138, 199));

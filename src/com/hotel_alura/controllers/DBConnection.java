@@ -1,4 +1,4 @@
-package com.hotel_alura.models;
+package com.hotel_alura.controllers;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import java.sql.Connection;
@@ -10,7 +10,7 @@ public class DBConnection {
         ComboPooledDataSource pooledDatasource = new ComboPooledDataSource();
         pooledDatasource.setJdbcUrl("jdbc:mysql://localhost/alura_hotel?useTimeZone=true&serverTimeZone=UTC");
         pooledDatasource.setUser("root");
-        pooledDatasource.setPassword("");
+        pooledDatasource.setPassword("MT8246a");
         pooledDatasource.setMaxPoolSize(10);
         this.dataSources = pooledDatasource;
     }

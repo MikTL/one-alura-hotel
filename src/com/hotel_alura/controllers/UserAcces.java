@@ -1,4 +1,4 @@
-package com.hotel_alura.models;
+package com.hotel_alura.controllers;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
