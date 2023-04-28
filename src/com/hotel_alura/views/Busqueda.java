@@ -293,6 +293,33 @@ public class Busqueda extends JFrame {
 		btnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		contentPane.add(btnEditar);
 		
+		btnEditar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				JTable table = tbReservas;
+		        int selectedRow = table.getSelectedRow();
+		        if (selectedRow != -1) {
+		            table.getCellEditor().stopCellEditing();
+		            table.clearSelection();
+		            table.transferFocus();
+		        }
+				System.out.println("Mouse clickeado");
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseEntered(e);
+				btnEditar.setBackground(new Color(75, 162, 162));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseExited(e);
+				btnEditar.setBackground(new Color(12, 138, 199));
+			}
+		});
+		
 		JLabel lblEditar = new JLabel("EDITAR");
 		lblEditar.setHorizontalAlignment(SwingConstants.CENTER);
 		lblEditar.setForeground(Color.WHITE);
