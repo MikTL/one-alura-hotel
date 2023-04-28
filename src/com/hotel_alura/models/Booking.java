@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 
 public class Booking {
+	private int idBooking;
     private Date entryDate;
     private Date exitDate;
     private BigDecimal value;
@@ -16,7 +17,17 @@ public class Booking {
         this.paymentMethod = paymentMethod;
     }
 
-    public Date getEntryDate() {
+    public Booking() {
+		// TODO Auto-generated constructor stub
+	}
+    
+    public int getIdBooking() {
+        return idBooking;
+    }
+    public void setIdBooking(int idBooking) {
+         this.idBooking= idBooking;
+    }
+	public Date getEntryDate() {
         return entryDate;
     }
 

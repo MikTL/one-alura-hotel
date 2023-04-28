@@ -20,7 +20,7 @@ public class GuestDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, guest.getName());
             stmt.setString(2, guest.getLastName());
-            stmt.setDate(3, Date.valueOf(guest.getDateOfBirth()));
+            stmt.setDate(3, guest.getDateOfBirth());
             stmt.setString(4, guest.getNationality());
             stmt.setString(5, guest.getPhoneNumber());
             stmt.setInt(6, guest.getBookingId());

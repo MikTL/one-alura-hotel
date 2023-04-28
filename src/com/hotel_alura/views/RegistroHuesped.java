@@ -267,7 +267,7 @@ public class RegistroHuesped extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Date fechaNac = txtFechaN.getDate();
-				LocalDate fechaNacimiento = fechaNac.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+				java.sql.Date fechaNacimiento = new java.sql.Date(fechaNac.getTime() );
 				
 				Guest guest= new Guest(
 						txtNombre.getText(), 
