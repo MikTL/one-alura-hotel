@@ -5,7 +5,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import com.hotel_alura.controllers.CrudDAO;
 import com.hotel_alura.models.Booking;
@@ -30,6 +33,8 @@ import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.math.BigDecimal;
+import java.sql.Date;
 
 @SuppressWarnings("serial")
 public class Busqueda extends JFrame {
@@ -119,6 +124,30 @@ public class Busqueda extends JFrame {
 		    modelo.addRow(row);
 		}
 		
+		tbReservas.getModel().addTableModelListener(new TableModelListener() {
+		    public void tableChanged(TableModelEvent e) {
+		        if (e.getType() == TableModelEvent.UPDATE) { // verifica que la acción sea una actualización
+		            int row = e.getFirstRow();
+		            TableModel model = (TableModel)e.getSource();
+		            
+		            // obtén los datos de la fila modificada
+		            int numeroReserva = (int) model.getValueAt(row, 0);
+		            Date fechaCheckIn = (Date) model.getValueAt(row, 1);
+		            Date fechaCheckOut =(Date) model.getValueAt(row, 2);
+		            BigDecimal valor = new BigDecimal(model.getValueAt(row, 3).toString());
+		            String formaPago = model.getValueAt(row, 4).toString();
+		            
+		            Booking bookingEdit= new Booking(fechaCheckIn, fechaCheckOut, valor, formaPago);
+		            bookingEdit.setIdBooking(numeroReserva);
+		            
+		            crudDAO.updateBooking(bookingEdit);
+		            // aquí puedes agregar la lógica para actualizar la base de datos con los nuevos valores
+		            
+		            // puedes usar el número de reserva para identificar la reserva que se modificó
+		            System.out.println("Reserva modificada: " + numeroReserva + ", check-in: " + fechaCheckIn + ", check-out: " + fechaCheckOut + ", valor: " + valor + ", forma de pago: " + formaPago);
+		        }
+		    }
+		});
 		
 		tbHuespedes = new JTable();
 		tbHuespedes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

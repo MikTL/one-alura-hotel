@@ -1,7 +1,6 @@
 package com.hotel_alura.controllers;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import com.hotel_alura.models.Guest;

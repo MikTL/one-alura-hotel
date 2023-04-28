@@ -59,4 +59,18 @@ public class CrudDAO {
 	        }
 	        return guests;
 	    }
+	    public void updateBooking(Booking booking) {
+	        String sql = "UPDATE bookings SET entry_date=?, exit_date=?, value=?, payment_method=? WHERE id_bookings=?";
+	        try (Connection conn = dbConnection.getConnection();
+	             PreparedStatement stmt = conn.prepareStatement(sql)) {
+	            stmt.setDate(1, booking.getEntryDate());
+	            stmt.setDate(2, booking.getExitDate());
+	            stmt.setBigDecimal(3, booking.getValue());
+	            stmt.setString(4, booking.getPaymentMethod());
+	            stmt.setInt(5, booking.getIdBooking());
+	            stmt.executeUpdate();
+	        } catch (SQLException e) {
+	            throw new RuntimeException("Error while updating booking", e);
+	        }
+	    }
 }
