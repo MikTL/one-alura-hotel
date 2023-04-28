@@ -6,6 +6,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.hotel_alura.controllers.CrudDAO;
+import com.hotel_alura.models.Booking;
+import com.hotel_alura.models.Guest;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -38,7 +43,10 @@ public class Busqueda extends JFrame {
 	private JLabel labelAtras;
 	private JLabel labelExit;
 	int xMouse, yMouse;
-
+	
+	CrudDAO crudDAO = new CrudDAO();
+	List<Booking> bookings = crudDAO.getAllBookings();
+	List<Guest> guests= crudDAO.getAllGuests();
 	/**
 	 * Launch the application.
 	 */
@@ -76,7 +84,6 @@ public class Busqueda extends JFrame {
 		contentPane.add(txtBuscar);
 		txtBuscar.setColumns(10);
 		
-		
 		JLabel lblNewLabel_4 = new JLabel("SISTEMA DE BÚSQUEDA");
 		lblNewLabel_4.setForeground(new Color(12, 138, 199));
 		lblNewLabel_4.setFont(new Font("Roboto Black", Font.BOLD, 24));
@@ -89,9 +96,6 @@ public class Busqueda extends JFrame {
 		panel.setBounds(20, 169, 865, 328);
 		contentPane.add(panel);
 
-		
-		
-		
 		tbReservas = new JTable();
 		tbReservas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tbReservas.setFont(new Font("Roboto", Font.PLAIN, 16));
@@ -104,6 +108,16 @@ public class Busqueda extends JFrame {
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
+
+		for (Booking booking : bookings) {
+		    Object[] row = new Object[5];
+		    row[0] = booking.getIdBooking();
+		    row[1] = booking.getEntryDate();
+		    row[2] = booking.getExitDate();
+		    row[3] = booking.getValue();
+		    row[4] = booking.getPaymentMethod();
+		    modelo.addRow(row);
+		}
 		
 		
 		tbHuespedes = new JTable();
@@ -121,6 +135,18 @@ public class Busqueda extends JFrame {
 		panel.addTab("Huéspedes", new ImageIcon(Busqueda.class.getResource("/imagenes/pessoas.png")), scroll_tableHuespedes, null);
 		scroll_tableHuespedes.setVisible(true);
 		
+		for (Guest  guest: guests) {
+		    Object[] row = new Object[7];
+		    row[0] = guest.getIdGuest();
+		    row[1] = guest.getName();
+		    row[2] = guest.getLastName();
+		    row[3] = guest.getDateOfBirth();
+		    row[4] = guest.getNationality();
+		    row[5] = guest.getPhoneNumber();
+		    row[6] = guest.getBookingId();
+		    modeloHuesped.addRow(row);
+		}
+		
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/Ha-100px.png")));
 		lblNewLabel_2.setBounds(56, 51, 104, 107);
@@ -131,7 +157,6 @@ public class Busqueda extends JFrame {
 			@Override
 			public void mouseDragged(MouseEvent e) {
 				headerMouseDragged(e);
-			     
 			}
 		});
 		header.addMouseListener(new MouseAdapter() {
