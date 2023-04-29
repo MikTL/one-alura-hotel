@@ -10,13 +10,12 @@ import java.util.List;
 import com.hotel_alura.models.Booking;
 import com.hotel_alura.models.Guest;
 
-public class CrudDAO {
+public class CrudBookinDAO {
 	 private DBConnection dbConnection;
 
-	    public CrudDAO() {
+	    public CrudBookinDAO() {
 	        this.dbConnection = new DBConnection();
 	    }
-
 	    public List<Booking> getAllBookings() {
 	        String sql = "SELECT id_bookings, entry_date, exit_date, value, payment_method FROM bookings";
 	        List<Booking> bookings = new ArrayList<>();
@@ -37,28 +36,6 @@ public class CrudDAO {
 	        }
 	        return bookings;
 	    }
-	    public List<Guest> getAllGuests() {
-	        String sql = "SELECT id_guest, name, last_name, date_birth, nationality, phone_number, id_booking FROM guests";
-	        List<Guest> guests = new ArrayList<>();
-	        try (Connection conn = dbConnection.getConnection();
-	             PreparedStatement stmt = conn.prepareStatement(sql);
-	             ResultSet resultSet = stmt.executeQuery()) {
-	            while (resultSet.next()) {
-	                Guest guest = new Guest();
-	                guest.setIdGuest(resultSet.getInt("id_guest"));
-	                guest.setName(resultSet.getString("name"));
-	                guest.setLastName(resultSet.getString("last_name"));
-	                guest.setDateOfBirth(resultSet.getDate("date_birth"));
-	                guest.setNationality(resultSet.getString("nationality"));
-	                guest.setPhoneNumber(resultSet.getString("phone_number"));
-	                guest.setBookingId(resultSet.getInt("id_booking"));
-	                guests.add(guest);
-	            }
-	        } catch (SQLException e) {
-	            throw new RuntimeException("Error while retrieving bookings", e);
-	        }
-	        return guests;
-	    }
 	    public void updateBooking(Booking booking) {
 	        String sql = "UPDATE bookings SET entry_date=?, exit_date=?, value=?, payment_method=? WHERE id_bookings=?";
 	        try (Connection conn = dbConnection.getConnection();
@@ -71,6 +48,20 @@ public class CrudDAO {
 	            stmt.executeUpdate();
 	        } catch (SQLException e) {
 	            throw new RuntimeException("Error while updating booking", e);
+	        }
+	    }
+	    public void deleteBooking(int idBooking) {
+	        String sql = "DELETE FROM bookings WHERE id_bookings = ?";
+	        try (Connection conn = dbConnection.getConnection();
+	             PreparedStatement stmt = conn.prepareStatement(sql)) {
+	            stmt.setInt(1, idBooking);
+	            int rowsDeleted = stmt.executeUpdate();
+	            if (rowsDeleted == 0) {
+	                throw new RuntimeException("No se encontró ninguna reserva con el id_bookings = " + idBooking);
+	            }
+	            System.out.println("La reserva con el id_bookings = " + idBooking + " ha sido eliminada exitosamente.");
+	        } catch (SQLException e) {
+	            throw new RuntimeException("Error al eliminar la reserva con id_bookings = " + idBooking, e);
 	        }
 	    }
 }

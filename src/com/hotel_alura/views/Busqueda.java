@@ -10,7 +10,8 @@ import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import com.hotel_alura.controllers.CrudDAO;
+import com.hotel_alura.controllers.CrudBookinDAO;
+import com.hotel_alura.controllers.CrudGuestDAO;
 import com.hotel_alura.models.Booking;
 import com.hotel_alura.models.Guest;
 
@@ -32,6 +33,7 @@ import javax.swing.JSeparator;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionAdapter;
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -49,9 +51,10 @@ public class Busqueda extends JFrame {
 	private JLabel labelExit;
 	int xMouse, yMouse;
 	
-	CrudDAO crudDAO = new CrudDAO();
-	List<Booking> bookings = crudDAO.getAllBookings();
-	List<Guest> guests= crudDAO.getAllGuests();
+	CrudBookinDAO crudBookingDAO = new CrudBookinDAO();
+	CrudGuestDAO crudGuestDAO= new CrudGuestDAO();
+	List<Booking> bookings = crudBookingDAO.getAllBookings();
+	List<Guest> guests= crudGuestDAO.getAllGuests();
 	/**
 	 * Launch the application.
 	 */
@@ -104,6 +107,7 @@ public class Busqueda extends JFrame {
 		tbReservas = new JTable();
 		tbReservas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tbReservas.setFont(new Font("Roboto", Font.PLAIN, 16));
+		tbReservas.setName("Reservas");
 		modelo = (DefaultTableModel) tbReservas.getModel();
 		modelo.addColumn("Numero de Reserva");
 		modelo.addColumn("Fecha Check In");
@@ -140,11 +144,11 @@ public class Busqueda extends JFrame {
 		            Booking bookingEdit= new Booking(fechaCheckIn, fechaCheckOut, valor, formaPago);
 		            bookingEdit.setIdBooking(numeroReserva);
 		            
-		            crudDAO.updateBooking(bookingEdit);
 		            // aquí puedes agregar la lógica para actualizar la base de datos con los nuevos valores
+		            crudBookingDAO.updateBooking(bookingEdit);
 		            
 		            // puedes usar el número de reserva para identificar la reserva que se modificó
-		            System.out.println("Reserva modificada: " + numeroReserva + ", check-in: " + fechaCheckIn + ", check-out: " + fechaCheckOut + ", valor: " + valor + ", forma de pago: " + formaPago);
+		            System.out.println("Reserva modificada: " + numeroReserva);
 		        }
 		    }
 		});
@@ -152,6 +156,7 @@ public class Busqueda extends JFrame {
 		tbHuespedes = new JTable();
 		tbHuespedes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tbHuespedes.setFont(new Font("Roboto", Font.PLAIN, 16));
+		tbHuespedes.setName("Huespedes");
 		modeloHuesped = (DefaultTableModel) tbHuespedes.getModel();
 		modeloHuesped.addColumn("Número de Huesped");
 		modeloHuesped.addColumn("Nombre");
@@ -175,6 +180,31 @@ public class Busqueda extends JFrame {
 		    row[6] = guest.getBookingId();
 		    modeloHuesped.addRow(row);
 		}
+		
+		tbHuespedes.getModel().addTableModelListener(new TableModelListener() {
+			@Override
+			public void tableChanged(TableModelEvent e) {
+				if(e.getType()==TableModelEvent.UPDATE) {
+					int row = e.getFirstRow();
+		            TableModel model = (TableModel)e.getSource();
+		            //campos:
+		            int idGuest= (int) model.getValueAt(row, 0);
+		            String name=  (String) model.getValueAt(row, 1);
+		            String lastName= (String) model.getValueAt(row, 2);
+		            Date dateOfbirth= (Date) model.getValueAt(row, 3);
+		            String nationality= (String) model.getValueAt(row, 4);
+		            String phoneNumber= (String) model.getValueAt(row, 5);
+		            int idBooking= (int) model.getValueAt(row, 6);
+		            Guest guestEdit= new Guest(name, lastName, dateOfbirth, nationality, phoneNumber, idBooking);
+		            guestEdit.setIdGuest(idGuest);
+		            
+		            crudGuestDAO.updateGuest(guestEdit);
+		            
+				}
+				
+			}
+		});
+		
 		
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/Ha-100px.png")));
@@ -297,14 +327,25 @@ public class Busqueda extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				super.mouseClicked(e);
+			
 				JTable table = tbReservas;
-		        int selectedRow = table.getSelectedRow();
-		        if (selectedRow != -1) {
-		            table.getCellEditor().stopCellEditing();
-		            table.clearSelection();
-		            table.transferFocus();
-		        }
-				System.out.println("Mouse clickeado");
+				int selectedRow = table.getSelectedRow();
+				if (selectedRow != -1) {
+					System.out.println("Reservas aaaa");
+					table.getCellEditor().stopCellEditing();
+					table.clearSelection();
+					table.transferFocus();
+				}					
+				
+				JTable table2 = tbHuespedes;
+				int selectedRow2 = table2.getSelectedRow();
+				if (selectedRow2 != -1) {
+					System.out.println("huespedes");
+					table2.getCellEditor().stopCellEditing();
+					table2.clearSelection();
+					table2.transferFocus();
+				}					
+					
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -333,6 +374,76 @@ public class Busqueda extends JFrame {
 		btnEliminar.setBounds(767, 508, 122, 35);
 		btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		contentPane.add(btnEliminar);
+		
+		btnEliminar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				super.mouseClicked(e);
+				
+				JTable table = tbReservas;
+				int selectedRow = table.getSelectedRow();
+				if (selectedRow != -1) {
+					int idBooking = (int) tbReservas.getValueAt(selectedRow, 0);
+					crudBookingDAO.deleteBooking(idBooking);
+					System.out.println("TbReservas: "+selectedRow+ " id: "+idBooking);
+					
+				}
+				
+				JTable table2 = tbHuespedes;
+				int selectedRow2 = table2.getSelectedRow();
+				if (selectedRow2 != -1) {
+					int idGuest= (int)tbHuespedes.getValueAt(selectedRow2, 0);
+					crudGuestDAO.deleteGuest(idGuest);
+					System.out.println("TbHuespedes: "+selectedRow2+" id: "+idGuest);
+				}
+
+		            
+	            //Creando una nueva instancia para volver a cargar los datos de la bd una vez borrada uno de ellos.
+	            CrudBookinDAO crudDAODel = new CrudBookinDAO();
+	            CrudGuestDAO crudGDel= new CrudGuestDAO();
+	        	List<Booking> bookingDel = crudDAODel.getAllBookings();
+	        	List<Guest> guestDel= crudGDel.getAllGuests();
+
+		        //Establecer los nuevos datos en el modelo de la tabla Reservas
+		        modelo.setRowCount(0); // Establecer el número de filas en cero
+		        for (Booking booking : bookingDel) {
+		            Object[] row = new Object[5];
+		            row[0] = booking.getIdBooking();
+		            row[1] = booking.getEntryDate();
+		            row[2] = booking.getExitDate();
+		            row[3] = booking.getValue();
+		            row[4] = booking.getPaymentMethod();
+		            modelo.addRow(row); // Agregar las nuevas filas al modelo
+		         }
+		        modeloHuesped.setRowCount(0);
+		        for (Guest  guest: guestDel) {
+				    Object[] row = new Object[7];
+				    row[0] = guest.getIdGuest();
+				    row[1] = guest.getName();
+				    row[2] = guest.getLastName();
+				    row[3] = guest.getDateOfBirth();
+				    row[4] = guest.getNationality();
+				    row[5] = guest.getPhoneNumber();
+				    row[6] = guest.getBookingId();
+				    modeloHuesped.addRow(row);
+				}
+		         // Actualizar la vista de la tabla
+		         tbReservas.repaint();
+		         tbHuespedes.repaint();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseEntered(e);
+				btnEliminar.setBackground(new Color(75, 162, 162));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseExited(e);
+				btnEliminar.setBackground(new Color(12, 138, 199));
+			}
+		});
 		
 		JLabel lblEliminar = new JLabel("ELIMINAR");
 		lblEliminar.setHorizontalAlignment(SwingConstants.CENTER);
