@@ -64,4 +64,28 @@ public class CrudBookinDAO {
 	            throw new RuntimeException("Error al eliminar la reserva con id_bookings = " + idBooking, e);
 	        }
 	    }
+	    public List<Booking> searchBookingsById(int idBooking) {
+	        String sql = "SELECT id_bookings, entry_date, exit_date, value, payment_method FROM bookings WHERE id_bookings = ?";
+	        List<Booking> bookings = new ArrayList<>();
+	        try (Connection conn = dbConnection.getConnection();
+	             PreparedStatement stmt = conn.prepareStatement(sql)) {
+	            stmt.setInt(1, idBooking);
+	            ResultSet resultSet = stmt.executeQuery();
+	            while (resultSet.next()) {
+	                Booking booking = new Booking();
+	                booking.setIdBooking(resultSet.getInt("id_bookings"));
+	                booking.setEntryDate(resultSet.getDate("entry_date"));
+	                booking.setExitDate(resultSet.getDate("exit_date"));
+	                booking.setValue(resultSet.getBigDecimal("value"));
+	                booking.setPaymentMethod(resultSet.getString("payment_method"));
+	                bookings.add(booking);
+	            }
+	        } catch (SQLException e) {
+	            throw new RuntimeException("Error while searching bookings by ID", e);
+	        }
+	        if (bookings.isEmpty()) {
+	            throw new RuntimeException("No se encontraron reservas con el id_bookings = " + idBooking);
+	        }
+	        return bookings;
+	    }
 }

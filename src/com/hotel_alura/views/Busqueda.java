@@ -5,6 +5,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -55,6 +59,8 @@ public class Busqueda extends JFrame {
 	CrudGuestDAO crudGuestDAO= new CrudGuestDAO();
 	List<Booking> bookings = crudBookingDAO.getAllBookings();
 	List<Guest> guests= crudGuestDAO.getAllGuests();
+	
+	String selectedTable="reservas";
 	/**
 	 * Launch the application.
 	 */
@@ -127,7 +133,6 @@ public class Busqueda extends JFrame {
 		    row[4] = booking.getPaymentMethod();
 		    modelo.addRow(row);
 		}
-		
 		tbReservas.getModel().addTableModelListener(new TableModelListener() {
 		    public void tableChanged(TableModelEvent e) {
 		        if (e.getType() == TableModelEvent.UPDATE) { // verifica que la acción sea una actualización
@@ -204,7 +209,18 @@ public class Busqueda extends JFrame {
 				
 			}
 		});
-		
+		panel.addChangeListener(new ChangeListener() {
+		    public void stateChanged(ChangeEvent e) {
+		        JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
+		        int index = sourceTabbedPane.getSelectedIndex();
+		        String title = sourceTabbedPane.getTitleAt(index);
+		        if (title.equals("Reservas")) {
+		            selectedTable="reservas";
+		        } else if (title.equals("Huéspedes")) {
+		        	selectedTable="huespedes";
+		        }
+		    }
+		});
 		
 		JLabel lblNewLabel_2 = new JLabel("");
 		lblNewLabel_2.setIcon(new ImageIcon(Busqueda.class.getResource("/imagenes/Ha-100px.png")));
@@ -300,7 +316,77 @@ public class Busqueda extends JFrame {
 		btnbuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
+				if(selectedTable=="reservas") {
+					String  idSearch = txtBuscar.getText();
+					if(idSearch != null && !idSearch.trim().isEmpty()) {
+						List<Booking> bookingsFound = crudBookingDAO.searchBookingsById(Integer.parseInt(idSearch));
+						modelo.setRowCount(0);
+				        for (Booking booking : bookingsFound) {
+				        	Object[] row = new Object[5];
+				            row[0] = booking.getIdBooking();
+				            row[1] = booking.getEntryDate();
+				            row[2] = booking.getExitDate();
+				            row[3] = booking.getValue();
+				            row[4] = booking.getPaymentMethod();
+				            modelo.addRow(row);
+				        }
+						System.out.println(txtBuscar.getText());
+					}else {
+						modelo.setRowCount(0);
+						for (Booking booking : bookings) {
+						    Object[] row = new Object[5];
+						    row[0] = booking.getIdBooking();
+						    row[1] = booking.getEntryDate();
+						    row[2] = booking.getExitDate();
+						    row[3] = booking.getValue();
+						    row[4] = booking.getPaymentMethod();
+						    modelo.addRow(row);
+						}
+					}
+				}
+				if(selectedTable=="huespedes") {
+					String lastName=txtBuscar.getText();
+					if(lastName != null && !lastName.trim().isEmpty()) {
+						List<Guest> guestsFound= crudGuestDAO.searchGuestByLastName(lastName);
+						modeloHuesped.setRowCount(0);
+						for (Guest  guest: guestsFound) {
+						    Object[] row = new Object[7];
+						    row[0] = guest.getIdGuest();
+						    row[1] = guest.getName();
+						    row[2] = guest.getLastName();
+						    row[3] = guest.getDateOfBirth();
+						    row[4] = guest.getNationality();
+						    row[5] = guest.getPhoneNumber();
+						    row[6] = guest.getBookingId();
+						    modeloHuesped.addRow(row);
+						}
+					}else {
+						modeloHuesped.setRowCount(0);
+						for (Guest  guest: guests) {
+						    Object[] row = new Object[7];
+						    row[0] = guest.getIdGuest();
+						    row[1] = guest.getName();
+						    row[2] = guest.getLastName();
+						    row[3] = guest.getDateOfBirth();
+						    row[4] = guest.getNationality();
+						    row[5] = guest.getPhoneNumber();
+						    row[6] = guest.getBookingId();
+						    modeloHuesped.addRow(row);
+						}
+					}
+				}
+				
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseEntered(e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				super.mouseExited(e);
 			}
 		});
 		btnbuscar.setLayout(null);
@@ -308,6 +394,9 @@ public class Busqueda extends JFrame {
 		btnbuscar.setBounds(748, 125, 122, 35);
 		btnbuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		contentPane.add(btnbuscar);
+		
+		btnbuscar.addMouseListener(new MouseAdapter() {
+		});
 		
 		JLabel lblBuscar = new JLabel("BUSCAR");
 		lblBuscar.setBounds(0, 0, 122, 35);

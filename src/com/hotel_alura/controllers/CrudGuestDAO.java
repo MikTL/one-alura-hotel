@@ -69,4 +69,27 @@ public class CrudGuestDAO {
             throw new RuntimeException("Error al eliminar el huésped con id_guest = " + idGuest, e);
         }
     }
+    public List<Guest> searchGuestByLastName(String lastName) {
+        String sql = "SELECT id_guest, name, last_name, date_birth, nationality, phone_number, id_booking FROM guests WHERE last_name LIKE ?";
+        List<Guest> guests = new ArrayList<>();
+        try (Connection conn = dbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, "%" + lastName + "%");
+            ResultSet resultSet = stmt.executeQuery();
+            while (resultSet.next()) {
+                Guest guest = new Guest();
+                guest.setIdGuest(resultSet.getInt("id_guest"));
+                guest.setName(resultSet.getString("name"));
+                guest.setLastName(resultSet.getString("last_name"));
+                guest.setDateOfBirth(resultSet.getDate("date_birth"));
+                guest.setNationality(resultSet.getString("nationality"));
+                guest.setPhoneNumber(resultSet.getString("phone_number"));
+                guest.setBookingId(resultSet.getInt("id_booking"));
+                guests.add(guest);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error while searching guests by last name", e);
+        }
+        return guests;
+    }
 }
